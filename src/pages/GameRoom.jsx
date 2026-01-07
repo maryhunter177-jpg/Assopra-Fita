@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Emulator from '../components/Emulator';
-import { Calendar, Gamepad, Info, ArrowRight, Download, Upload, RotateCcw, Maximize } from 'lucide-react';
+import { Calendar, Gamepad, Info, ArrowRight, Download, Upload, RotateCcw, Maximize, Camera } from 'lucide-react';
 
 const GameRoom = () => {
   const { gameId } = useParams();
@@ -17,12 +17,27 @@ const GameRoom = () => {
   const salvarJogo = () => { if (window.EJS_player) window.EJS_player.saveState(); };
   const carregarJogo = () => { if (window.EJS_player) window.EJS_player.loadState(); };
   const reiniciarJogo = () => { if (window.EJS_player) window.EJS_player.restart(); };
+  
   const telaCheia = () => {
     if (window.EJS_player) { try { window.EJS_player.maximize(); } catch (e) { } }
     const elem = document.getElementById('tela-do-jogo');
     if (elem) {
       if (elem.requestFullscreen) elem.requestFullscreen();
       else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    }
+  };
+
+  const capturarConquista = () => {
+    const canvas = document.querySelector('#tela-do-jogo canvas');
+    if (canvas) {
+      const printDaTela = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.download = `conquista-sopra-fitas-${gameId}.png`;
+      link.href = printDaTela;
+      link.click();
+      alert("📸 Tela capturada! O download da imagem começou.");
+    } else {
+      alert("⚠️ Erro: Não consegui capturar a tela. O jogo está rodando?");
     }
   };
 
@@ -87,7 +102,6 @@ const GameRoom = () => {
       capa: '/Streets_of_Rage.jpeg', 
       descricao: 'A cidade foi tomada por uma poderosa organização criminosa. Jogue como Axel, Blaze ou Adam e limpe as ruas na base da pancadaria! Trilha sonora lendária de Yuzo Koshiro.'
     },
-    // CORRIGIDO AQUI TAMBÉM
     'n64-mario': {
       id: 'n64-mario',
       url: '/mario64.z64',
@@ -127,6 +141,37 @@ const GameRoom = () => {
       fabricante: 'Game Freak / Nintendo',
       capa: '/pokemon-silver.jpg',
       descricao: 'Uma jornada épica por Johto e Kanto! Capture novos Pokémon, enfrente a Equipe Rocket e descubra os mistérios de Lugia e Ho-Oh.'
+    },
+    'snes-dkc': {
+      id: 'snes-dkc',
+      url: '/dkc.sfc',       
+      core: 'snes',          
+      nome: 'Donkey Kong Country',
+      ano: '1994',
+      fabricante: 'Rare / Nintendo',
+      capa: '/dkc.png',
+      descricao: 'Junte-se a Donkey Kong e Diddy Kong nesta aventura revolucionária com gráficos pré-renderizados que marcaram época. Recupere suas bananas do Rei K. Rool!'
+    },
+    // --- NOVOS JOGOS ---
+    'snes-aladdin': {        
+      id: 'snes-aladdin',
+      url: '/aladdin.sfc',     
+      core: 'snes',          
+      nome: 'Disney\'s Aladdin',
+      ano: '1993',
+      fabricante: 'Capcom',  
+      capa: '/aladdin.jpg',
+      descricao: 'A versão da Capcom para SNES! Pule na cabeça dos guardas, use o lençol para planar e explore Agrabah nesta aventura clássica de plataforma.'
+    },
+    'snes-rrr': {
+      id: 'snes-rrr',
+      url: '/rrr.sfc',       
+      core: 'snes',          
+      nome: 'Rock n\' Roll Racing',
+      ano: '1993',
+      fabricante: 'Blizzard',
+      capa: '/rrr.jpg',
+      descricao: 'Acelere ao som de Black Sabbath e Deep Purple! Corridas isométricas com armas, explosões e a narração lendária: "Let the carnage begin!".'
     }
   };
 
@@ -156,6 +201,10 @@ const GameRoom = () => {
                 <button onClick={carregarJogo} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: '#333', color: 'white', border: '1px solid #555', padding: '8px 12px', borderRadius: '5px', fontSize: '0.8rem' }}><Upload size={16} /> Load</button>
                 <button onClick={reiniciarJogo} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: '#333', color: 'white', border: '1px solid #555', padding: '8px 12px', borderRadius: '5px', fontSize: '0.8rem' }}><RotateCcw size={16} /> Reset</button>
                 <button onClick={telaCheia} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: '#333', color: 'white', border: '1px solid #555', padding: '8px 12px', borderRadius: '5px', fontSize: '0.8rem' }}><Maximize size={16} /> Full</button>
+                
+                <button onClick={capturarConquista} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'linear-gradient(45deg, #ffc300, #fca311)', color: '#1a1a2e', border: 'none', padding: '8px 12px', borderRadius: '5px', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer' }}>
+                  <Camera size={16} /> Print
+                </button>
              </div>
              
              <div style={{ width: '100%', background: '#1e1e1e', borderRadius: '15px', padding: '25px', border: '1px solid #333', marginBottom: '30px' }}>

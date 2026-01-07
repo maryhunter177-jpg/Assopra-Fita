@@ -61,7 +61,6 @@ const Home = () => {
       console: 'MEGA DRIVE', 
       capa: '/Streets_of_Rage.jpeg' 
     },
-  
     { 
       id: 'n64-mario', 
       nome: 'Super Mario 64', 
@@ -85,6 +84,25 @@ const Home = () => {
       nome: 'Pokémon Silver', 
       console: 'GAME BOY', 
       capa: '/pokemon-silver.jpg' 
+    },
+    { 
+      id: 'snes-dkc', 
+      nome: 'Donkey Kong Country', 
+      console: 'SNES', 
+      capa: '/dkc.png' 
+    },
+    // --- NOVOS JOGOS (Agora como SNES) ---
+    { 
+      id: 'snes-aladdin', 
+      nome: 'Disney\'s Aladdin', 
+      console: 'SNES',   
+      capa: '/aladdin.jpg' 
+    },
+    { 
+      id: 'snes-rrr', 
+      nome: 'Rock n\' Roll Racing', 
+      console: 'SNES', 
+      capa: '/rrr.jpg' 
     }
   ];
 
