@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import { supabase } from '../supabaseClient'; 
-import { Search, Gamepad2, Heart, Dices, Layers, User, LogOut, Coins } from 'lucide-react';
+import { Search, Gamepad2, Heart, Dices, Layers, User, LogOut, Coins, Trophy, Crown, Medal } from 'lucide-react';
 
 const Home = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
   const [pontos, setPontos] = useState(0);
   const [nomeUsuario, setNomeUsuario] = useState('');
+  
+  // Ranking State
+  const [ranking, setRanking] = useState([]);
+  const [loadingRanking, setLoadingRanking] = useState(true); // Novo estado para loading
+  
   const [busca, setBusca] = useState('');
   const [filtroConsole, setFiltroConsole] = useState('Todos');
   
@@ -21,28 +26,38 @@ const Home = () => {
   }, [favoritos]);
 
   useEffect(() => {
-    const fetchPerfil = async (userId) => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('pontos, nome') 
-        .eq('id', userId)
-        .single();
-
-      if (data) {
-        setPontos(data.pontos);
-        setNomeUsuario(data.nome);
+    const fetchDados = async (userId) => {
+      // 1. Pega perfil do usuário
+      const { data: perfil } = await supabase.from('profiles').select('pontos, nome').eq('id', userId).single();
+      if (perfil) {
+        setPontos(perfil.pontos);
+        setNomeUsuario(perfil.nome);
       }
     };
 
+    // 2. Pega o Ranking (Top 5 para o Widget)
+    const fetchRanking = async () => {
+        setLoadingRanking(true);
+        const { data } = await supabase
+            .from('profiles')
+            .select('nome, pontos')
+            .order('pontos', { ascending: false })
+            .limit(5); // Pegamos Top 5 pra caber bonito ali em cima
+        if (data) setRanking(data);
+        setLoadingRanking(false);
+    };
+
+    fetchRanking();
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session) fetchPerfil(session.user.id);
+      if (session) fetchDados(session.user.id);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
-        fetchPerfil(session.user.id);
+        fetchDados(session.user.id);
       } else {
         setPontos(0);
         setNomeUsuario('');
@@ -101,57 +116,29 @@ const Home = () => {
     return bateBusca && bateCategoria;
   });
 
+  const getIconeRank = (index) => {
+    if (index === 0) return <Crown size={14} color="#fca311" fill="#fca311" />; 
+    if (index === 1) return <Medal size={14} color="#C0C0C0" />;
+    if (index === 2) return <Medal size={14} color="#CD7F32" />;
+    return <span style={{ color: '#666', fontSize: '0.7rem', fontWeight: 'bold' }}>#{index + 1}</span>;
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'linear-gradient(to bottom, #121212, #1a1a2e)', fontFamily: '"Inter", sans-serif', position: 'relative' }}>
       
-      {/* --- BARRA SUPERIOR DE USUÁRIO (AGORA COM FUNDO) --- */}
-      <div style={{ 
-          position: 'fixed', // Fixa no topo pra sempre aparecer
-          top: 0, 
-          left: 0,
-          right: 0,
-          padding: '15px 30px',
-          background: 'rgba(18, 18, 18, 0.95)', // Fundo escuro levemente transparente
-          borderBottom: '1px solid #333',
-          zIndex: 100, 
-          display: 'flex', 
-          justifyContent: 'flex-end', // Joga tudo pra direita
-          alignItems: 'center',
-          gap: '15px'
-      }}>
+      {/* --- BARRA SUPERIOR DE USUÁRIO --- */}
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, padding: '15px 30px', background: 'rgba(18, 18, 18, 0.95)', borderBottom: '1px solid #333', zIndex: 100, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '15px' }}>
         {session ? (
           <>
-            {/* MOSTRADOR DE PONTOS */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#000', padding: '6px 15px', borderRadius: '20px', border: '1px solid #fca311' }}>
                 <Coins size={16} color="#fca311" />
                 <span style={{ color: '#fca311', fontWeight: 'bold', fontSize: '0.9rem' }}>{pontos}</span>
             </div>
-
-            {/* BOTÃO DE PERFIL (CLARO E VISÍVEL) */}
             <Link to="/perfil">
-                <button style={{ 
-                    background: '#252525', 
-                    color: '#fff', 
-                    border: '1px solid #666', 
-                    padding: '8px 16px', 
-                    borderRadius: '20px', 
-                    cursor: 'pointer', 
-                    fontWeight: 'bold', 
-                    fontSize: '0.85rem', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '8px',
-                    transition: '0.2s'
-                }}
-                onMouseEnter={(e) => {e.currentTarget.style.borderColor = '#fca311'; e.currentTarget.style.color = '#fca311'}}
-                onMouseLeave={(e) => {e.currentTarget.style.borderColor = '#666'; e.currentTarget.style.color = '#fff'}}
-                >
-                    <User size={16} /> 
-                    {nomeUsuario || "Meu Perfil"}
+                <button style={{ background: '#252525', color: '#fff', border: '1px solid #666', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', transition: '0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.borderColor = '#fca311'; e.currentTarget.style.color = '#fca311'}} onMouseLeave={(e) => {e.currentTarget.style.borderColor = '#666'; e.currentTarget.style.color = '#fff'}}>
+                    <User size={16} /> {nomeUsuario || "Meu Perfil"}
                 </button>
             </Link>
-
-            {/* BOTÃO SAIR */}
             <button onClick={handleLogout} title="Sair da Conta" style={{ background: '#333', color: '#ff4d4d', border: '1px solid #444', padding: '8px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <LogOut size={16} />
             </button>
@@ -165,9 +152,63 @@ const Home = () => {
         )}
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 20px 40px 20px', width: '100%', flex: 1 }}> {/* Aumentei o padding top pra 100px pra barra não tampar o logo */}
-        <header style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <img src="/logo.jpg" alt="Sopra Fitas Logo" style={{ maxWidth: '350px', width: '100%', height: 'auto', filter: 'drop-shadow(0 0 15px rgba(255, 165, 0, 0.2))' }} />
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 20px 40px 20px', width: '100%', flex: 1 }}>
+        
+        {/* --- HEADER COM LOGO E RANKING FLUTUANTE --- */}
+        <header style={{ textAlign: 'center', marginBottom: '40px', position: 'relative' }}>
+          
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+              <img src="/logo.jpg" alt="Sopra Fitas Logo" style={{ maxWidth: '350px', width: '100%', height: 'auto', filter: 'drop-shadow(0 0 15px rgba(255, 165, 0, 0.2))' }} />
+              
+              {/* --- WIDGET DE RANKING (FLUTUANDO À DIREITA DO LOGO) --- */}
+              <div style={{ 
+                  position: 'absolute', 
+                  right: '-550px', // <--- ARREDEI MAIS PRA DIREITA
+                  top: '10px',
+                  width: '240px',
+                  background: 'rgba(30, 30, 30, 0.9)',
+                  border: '1px solid #444',
+                  borderRadius: '12px',
+                  padding: '15px',
+                  textAlign: 'left',
+                  boxShadow: '0 4px 15px rgba(184, 107, 8, 0.5)',
+                  zIndex: 10,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px'
+              }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', borderBottom: '1px solid #333', paddingBottom: '5px' }}>
+                      <span style={{ color: '#fca311', fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                          <Trophy size={14} /> TOP 5
+                      </span>
+                      <Link to="/ranking" style={{ fontSize: '0.7rem', color: '#888', textDecoration: 'none' }}>Ver tudo</Link>
+                  </div>
+                  
+                  {loadingRanking ? (
+                      <div style={{ textAlign: 'center', color: '#666', fontSize: '0.8rem', padding: '10px' }}>Carregando...</div>
+                  ) : (
+                    // --- LÓGICA PARA MOSTRAR SEMPRE 5 SLOTS ---
+                    [...Array(5)].map((_, idx) => {
+                        const user = ranking[idx]; // Tenta pegar o usuário nessa posição
+                        return (
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', padding: '5px 0', borderBottom: idx < 4 ? '1px solid #2a2a2a' : 'none' }}>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                                    <div style={{ width: '20px', display: 'flex', justifyContent: 'center' }}>{getIconeRank(idx)}</div>
+                                    {/* Se tiver usuário mostra o nome, se não mostra '---' */}
+                                    <span style={{ color: user ? '#fff' : '#555', fontWeight: user && idx < 3 ? 'bold' : 'normal' }}>
+                                        {user ? (user.nome || 'Anônimo') : '---'}
+                                    </span>
+                                </div>
+                                {/* Se tiver usuário mostra pontos, se não mostra '-' */}
+                                <span style={{ color: user ? '#fca311' : '#555', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                                    {user ? user.pontos : '-'}
+                                </span>
+                            </div>
+                        );
+                    })
+                  )}
+              </div>
+          </div>
 
           <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: '10px', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
             <div style={{ position: 'relative', flex: 1 }}>

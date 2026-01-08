@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, User, Mail, Shield, Coins } from 'lucide-react';
+import { ArrowLeft, Save, User, Mail, Shield, Coins, Crown, Trophy } from 'lucide-react'; // <--- ADICIONEI OS ÍCONES NOVOS AQUI
 
 const Perfil = () => {
   const navigate = useNavigate();
@@ -125,6 +125,29 @@ const Perfil = () => {
               {saving ? 'Salvando...' : <><Save size={18} /> Salvar Alterações</>}
             </button>
           </form>
+
+          {/* --- AQUI ESTAVA FALTANDO! O PAINEL DE ADMIN --- */}
+          {role === 'admin' && (
+            <div style={{ marginTop: '40px', paddingTop: '30px', borderTop: '1px solid #333' }}>
+              <h3 style={{ color: '#fca311', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+                <Crown size={20} /> Painel do Game Master
+              </h3>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                <Link to="/ranking" style={{ textDecoration: 'none' }}>
+                    <button style={{ width: '100%', padding: '15px', background: '#252525', border: '1px solid #444', borderRadius: '10px', color: 'white', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', transition: '0.2s' }}>
+                        <Trophy size={24} color="#fca311" />
+                        <span>Ver Ranking Global</span>
+                    </button>
+                </Link>
+
+                <button onClick={() => alert('Em breve: Aprovar Prints dos Jogadores!')} style={{ width: '100%', padding: '15px', background: '#252525', border: '1px solid #444', borderRadius: '10px', color: 'white', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', opacity: 0.7 }}>
+                    <Shield size={24} color="#00d4ff" />
+                    <span>Aprovar Missões (Em Breve)</span>
+                </button>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
