@@ -82,7 +82,7 @@ const Login = () => {
                 {isSignUp ? (
                     // Texto do Modo Cadastro
                     <>
-                        <li>Use um <strong>e-mail válido</strong> (você vai receber um link).</li>
+                        <li>Use um <strong>e-mail válido</strong> (você vai receber um link do supabase).</li>
                         <li>Senha deve ter no mínimo <strong>6 dígitos</strong>.</li>
                         <li>Depois de cadastrar, <strong>confirme no seu e-mail</strong>.</li>
                         <li style={{color: '#fff'}}>⚠️ Sem confirmar, o login não funciona!</li>
