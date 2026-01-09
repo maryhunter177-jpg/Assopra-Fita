@@ -80,19 +80,19 @@ const Login = () => {
             
             <ul style={{ margin: 0, paddingLeft: '20px', color: '#ccc', fontSize: '0.75rem', lineHeight: '1.4' }}>
                 {isSignUp ? (
-                    // Texto do Modo Cadastro
+                    // Texto do Modo Cadastro (ATUALIZADO)
                     <>
-                        <li>Use um <strong>e-mail válido</strong> (você vai receber um link do supabase).</li>
+                        <li>Use um <strong>e-mail válido</strong> (você receberá um link do <strong>Supabase</strong>).</li>
                         <li>Senha deve ter no mínimo <strong>6 dígitos</strong>.</li>
                         <li>Depois de cadastrar, <strong>confirme no seu e-mail</strong>.</li>
-                        <li style={{color: '#fff'}}>⚠️ Sem confirmar, o login não funciona!</li>
+                        <li style={{color: '#fff', marginTop: '4px'}}>⚠️ Sem confirmar o e-mail, o login não funciona!</li>
                     </>
                 ) : (
                     // Texto do Modo Login
                     <>
-                        <li>Para participar do rank geral, faça o login.</li>
-                        <li>Ainda não tem conta? Veja como criar abaixo 👇</li>
-                        <li>Esqueceu de confirmar o e-mail? Cheque sua caixa de Spam.</li>
+                        <li>Para salvar seus jogos na nuvem, você precisa logar.</li>
+                        <li>Ainda não tem conta? Clique em "Criar Conta Agora".</li>
+                        <li>Não recebeu o e-mail do Supabase? Olhe sua caixa de Spam.</li>
                     </>
                 )}
             </ul>
