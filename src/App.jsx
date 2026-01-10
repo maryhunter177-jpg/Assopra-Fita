@@ -5,29 +5,43 @@ import GameRoom from './pages/GameRoom';
 import Login from './pages/Login';
 import Perfil from './pages/Perfil';
 import Ranking from './pages/Ranking';
-import AdminMissoes from './pages/AdminMissoes'; // <--- O Painel do GM
+
+// Importações da Área Administrativa (GM)
+import AdminDashboard from './pages/AdminDashboard'; // O portal central
+import AdminMissoes from './pages/AdminMissoes'; 
+import AdminJogos from './pages/AdminJogos'; 
+import AdminUsuarios from './pages/AdminUsuarios'; // <-- ADICIONE ESTE IMPORT
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Rota principal (Home) */}
+        {/* ==============================
+            ROTAS PÚBLICAS E DO JOGADOR
+           ============================== */}
+        
         <Route path="/" element={<Home />} />
-        
-        {/* Rota do Jogo */}
         <Route path="/jogar/:gameId" element={<GameRoom />} />
-        
-        {/* Rota de Login */}
         <Route path="/login" element={<Login />} />
-        
-        {/* Rota de Perfil */}
         <Route path="/perfil" element={<Perfil />} />
-
-        {/* Rota de Ranking */}
         <Route path="/ranking" element={<Ranking />} />
 
-        {/* Rota de Admin (Painel do GM) */}
-        <Route path="/admin" element={<AdminMissoes />} /> 
+        {/* ==============================
+            ROTAS EXCLUSIVAS DO ADMIN (GM)
+           ============================== */}
+
+        {/* Painel Central do Administrador */}
+        <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
+
+        {/* Validação de Missões (Prints) */}
+        <Route path="/admin-missoes" element={<AdminMissoes />} /> 
+
+        {/* Painel para Upar e Gerenciar Jogos */}
+        <Route path="/painel-admin-jogos" element={<AdminJogos />} /> 
+
+        {/* NOVA ROTA: Controle de Usuários (Vigiar o Marcos kkk) */}
+        <Route path="/admin-usuarios" element={<AdminUsuarios />} /> 
+
       </Routes>
     </Router>
   );
