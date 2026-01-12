@@ -7,9 +7,9 @@ const AnuncioLateral = ({ adKey, width, height }) => {
     const iframe = iframeRef.current;
     if (!iframe || !adKey) return;
 
-    // A mágica: Escrevemos o script do Adsterra diretamente dentro da janela do iframe
     const doc = iframe.contentWindow.document;
     
+    // Conteúdo do anúncio com script extra de proteção contra popups
     const adContent = `
       <!DOCTYPE html>
       <html style="margin:0;padding:0;overflow:hidden;">
@@ -24,6 +24,13 @@ const AnuncioLateral = ({ adKey, width, height }) => {
             };
           </script>
           <script type="text/javascript" src="https://www.highperformanceformat.com/${adKey}/invoke.js"></script>
+          <script>
+              // Mata popups na origem caso o sandbox falhe
+              window.open = function() { 
+                console.log('Popup bloqueado pelo Sopra Fitas!'); 
+                return null; 
+              };
+          </script>
         </body>
       </html>
     `;
@@ -36,7 +43,7 @@ const AnuncioLateral = ({ adKey, width, height }) => {
       console.error("Erro ao carregar anúncio:", err);
     }
 
-  }, [adKey]); // Recarrega se a chave mudar
+  }, [adKey, width, height]);
 
   return (
     <div style={{ margin: '10px 0', display: 'flex', justifyContent: 'center' }}>
@@ -45,7 +52,16 @@ const AnuncioLateral = ({ adKey, width, height }) => {
         title="Publicidade"
         width={width}
         height={height}
-        style={{ border: 'none', overflow: 'hidden', borderRadius: '8px', background: '#252525' }}
+        sandbox="allow-scripts allow-same-origin allow-forms"
+        referrerPolicy="no-referrer"
+        scrolling="no"
+        style={{ 
+            border: 'none', 
+            overflow: 'hidden', 
+            borderRadius: '8px', 
+            background: '#252525',
+            maxWidth: '100%' 
+        }}
       />
     </div>
   );
