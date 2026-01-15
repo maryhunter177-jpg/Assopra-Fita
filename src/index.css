@@ -22,7 +22,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   /* AQUI ESTAVA O VILÃO: Removemos a centralização forçada */
-  display: block; 
+  display: block;
 }
 
 /* Estilo dos Links */

@@ -8,8 +8,8 @@ import Ranking from './pages/Ranking';
 
 // Importações da Área Administrativa (GM)
 import AdminDashboard from './pages/AdminDashboard'; // O portal central
-import AdminMissoes from './pages/AdminMissoes'; 
-import AdminJogos from './pages/AdminJogos'; 
+import AdminMissoes from './pages/AdminMissoes';
+import AdminJogos from './pages/AdminJogos';
 import AdminUsuarios from './pages/AdminUsuarios'; // <-- ADICIONE ESTE IMPORT
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
         {/* ==============================
             ROTAS PÚBLICAS E DO JOGADOR
            ============================== */}
-        
+
         <Route path="/" element={<Home />} />
         <Route path="/jogar/:gameId" element={<GameRoom />} />
         <Route path="/login" element={<Login />} />
@@ -31,17 +31,16 @@ function App() {
            ============================== */}
 
         {/* Painel Central do Administrador */}
-        <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         {/* Validação de Missões (Prints) */}
-        <Route path="/admin-missoes" element={<AdminMissoes />} /> 
+        <Route path="/admin-missoes" element={<AdminMissoes />} />
 
         {/* Painel para Upar e Gerenciar Jogos */}
-        <Route path="/painel-admin-jogos" element={<AdminJogos />} /> 
+        <Route path="/painel-admin-jogos" element={<AdminJogos />} />
 
         {/* NOVA ROTA: Controle de Usuários (Vigiar o Marcos kkk) */}
-        <Route path="/admin-usuarios" element={<AdminUsuarios />} /> 
-
+        <Route path="/admin-usuarios" element={<AdminUsuarios />} />
       </Routes>
     </Router>
   );
