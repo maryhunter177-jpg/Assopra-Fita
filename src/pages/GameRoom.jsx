@@ -24,7 +24,7 @@ const GameRoom = () => {
   }, [gameId]);
 
   const salvarJogo = () => { if (window.EJS_player) window.EJS_player.saveState(); };
-  const carregarJogo = () => { if (window.EJS_player) window.EJS_player.loadState(); };
+  const carregarJogo = () => { if (window.EJS_player) window.EJS_player.loadState(); }; 
   const reiniciarJogo = () => { if (window.EJS_player) window.EJS_player.restart(); };
   
   const telaCheia = () => {
@@ -37,7 +37,7 @@ const GameRoom = () => {
   };
 
   const sairDoJogo = () => {
-    // Se quiser adicionar lógica de salvar antes de sair, coloque aqui
+    
     navigate('/'); // Volta para a Home
   };
 

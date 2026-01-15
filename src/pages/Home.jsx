@@ -19,7 +19,7 @@ const Home = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('sopra-fitas-favs', JSON.stringify(favoritos));
+    localStorage.setItem('sopra-fitas-favs', JSON.stringify(favoritos)); 
   }, [favoritos]);
 
   useEffect(() => {
