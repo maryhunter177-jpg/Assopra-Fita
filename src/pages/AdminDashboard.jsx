@@ -10,7 +10,8 @@ import {
   ArrowLeft,
   LayoutDashboard,
   UserPlus,
-  Target, // Importado para o novo botão de desafios
+  Target,
+  ShoppingBag, // Importado para a lojinha
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -192,12 +193,11 @@ const AdminDashboard = () => {
             color="#fca311"
           />
           
-          {/* AQUI ESTÁ O NOVO BOTÃO DE DESAFIOS QUE VOCÊ PEDIU */}
           <MenuButton
             to="/admin-desafios"
             icon={<Target size={32} />}
             title="Lançar Desafios"
-            desc="Criar as 3 missões especiais que aparecem no topo da Home."
+            desc="Criar as missões especiais que aparecem no topo da Home."
             color="#7209b7"
           />
 
@@ -208,6 +208,16 @@ const AdminDashboard = () => {
             desc="Revisar prints de tela e distribuir pontos para os players."
             color="#00ff88"
           />
+
+          {/* NOVO BOTÃO DA LOJA SHOPEE */}
+          <MenuButton
+            to="/admin-loja"
+            icon={<ShoppingBag size={32} />}
+            title="Gerenciar Loja"
+            desc="Cadastrar produtos e seus links de afiliado da Shopee."
+            color="#ee4d2d" // Cor oficial da Shopee
+          />
+
           <MenuButton
             to="/ranking"
             icon={<Trophy size={32} />}
@@ -215,6 +225,7 @@ const AdminDashboard = () => {
             desc="Visualizar a tabela de classificação dos jogadores."
             color="#00d4ff"
           />
+          
           <MenuButton
             to="/admin-usuarios"
             icon={<Users size={32} />}

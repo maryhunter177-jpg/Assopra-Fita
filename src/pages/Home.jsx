@@ -13,8 +13,9 @@ import {
   Trophy,
   Crown,
   Medal,
-  Target, // Ícone novo para missões
+  Target,
   Star,
+  ShoppingBag,
 } from 'lucide-react';
 import { games } from '../constants/games';
 
@@ -24,9 +25,9 @@ const Home = () => {
   const [pontos, setPontos] = useState(0);
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [ranking, setRanking] = useState([]);
-  const [missoes, setMissoes] = useState([]); // ESTADO PARA AS MISSÕES
+  const [missoes, setMissoes] = useState([]);
   const [loadingRanking, setLoadingRanking] = useState(true);
-  const [loadingMissoes, setLoadingMissoes] = useState(true); // LOADING DAS MISSÕES
+  const [loadingMissoes, setLoadingMissoes] = useState(true);
   const [loadingGames, setLoadingGames] = useState(true);
   const [jogos, setJogos] = useState(games);
   const [busca, setBusca] = useState('');
@@ -82,13 +83,12 @@ const Home = () => {
       setLoadingRanking(false);
     };
 
-    // BUSCAR MISSÕES DO MÊS - CORRIGIDO NOME DA TABELA E REMOVIDO LIMIT
     const fetchMissoes = async () => {
       setLoadingMissoes(true);
       const { data } = await supabase
-        .from('missoes_globais') // Nome correto conforme seu print do banco
+        .from('missoes_globais')
         .select('*')
-        .order('created_at', { ascending: false }); // Pega todos os desafios
+        .order('created_at', { ascending: false });
       if (data) setMissoes(data);
       setLoadingMissoes(false);
     };
@@ -193,79 +193,110 @@ const Home = () => {
           borderBottom: '1px solid #333',
           zIndex: 100,
           display: 'flex',
-          justifyContent: 'flex-end',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '15px',
         }}
       >
-        {session ? (
-          <>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: '#000',
-                padding: '6px 15px',
-                borderRadius: '20px',
-                border: '1px solid #fca311',
-              }}
-            >
-              <Coins size={16} color="#fca311" />
-              <span style={{ color: '#fca311', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                {pontos}
-              </span>
-            </div>
-            <Link to="/perfil">
-              <button
+        {/* GRUPO ESQUERDO: BOTÃO + FRASE FORA */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <Link 
+            to="/loja" 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              background: '#252525', 
+              color: '#ee4d2d', 
+              textDecoration: 'none', 
+              fontWeight: 'bold', 
+              fontSize: '0.85rem',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              border: '1px solid #646161',
+              transition: '0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.border = '1px solid #ee4d2d'}
+            onMouseOut={(e) => e.currentTarget.style.border = '1px solid #444'}
+          >
+            <ShoppingBag size={16} /> LOJINHA
+          </Link>
+          
+          <span style={{ color: '#f77960', fontSize: '0.85rem', fontWeight: '500' }}>
+            👈🏼 oi sou a mary.dev sou afiliada da shopee e essa é minha lojinha
+          </span>
+        </div>
+
+        {/* LADO DIREITO (PONTOS E PERFIL) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          {session ? (
+            <>
+              <div
                 style={{
-                  background: '#252525',
-                  color: '#fff',
-                  border: '1px solid #666',
-                  padding: '8px 16px',
-                  borderRadius: '20px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  fontSize: '0.85rem',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
+                  background: '#000',
+                  padding: '6px 15px',
+                  borderRadius: '20px',
+                  border: '1px solid #fca311',
                 }}
               >
-                <User size={16} /> {nomeUsuario || 'Meu Perfil'}
+                <Coins size={16} color="#fca311" />
+                <span style={{ color: '#fca311', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                  {pontos}
+                </span>
+              </div>
+              <Link to="/perfil">
+                <button
+                  style={{
+                    background: '#252525',
+                    color: '#fff',
+                    border: '1px solid #666',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  <User size={16} /> {nomeUsuario || 'Meu Perfil'}
+                </button>
+              </Link>
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: '#333',
+                  color: '#ff4d4d',
+                  border: '1px solid #444',
+                  padding: '8px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                }}
+              >
+                <LogOut size={16} />
+              </button>
+            </>
+          ) : (
+            <Link to="/login">
+              <button
+                style={{
+                  background: 'linear-gradient(45deg, #fca311, #ffc300)',
+                  color: '#1a1a2e',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                }}
+              >
+                <User size={16} /> ENTRAR
               </button>
             </Link>
-            <button
-              onClick={handleLogout}
-              style={{
-                background: '#333',
-                color: '#ff4d4d',
-                border: '1px solid #444',
-                padding: '8px',
-                borderRadius: '50%',
-                cursor: 'pointer',
-              }}
-            >
-              <LogOut size={16} />
-            </button>
-          </>
-        ) : (
-          <Link to="/login">
-            <button
-              style={{
-                background: 'linear-gradient(45deg, #fca311, #ffc300)',
-                color: '#1a1a2e',
-                border: 'none',
-                padding: '10px 20px',
-                borderRadius: '20px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-              }}
-            >
-              <User size={16} /> ENTRAR
-            </button>
-          </Link>
-        )}
+          )}
+        </div>
       </div>
 
       <div
@@ -285,8 +316,7 @@ const Home = () => {
           }}
         >
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            
-            {/* TABELA DE DESAFIOS DO MÊS */}
+            {/* DESAFIOS DO MÊS */}
             <div
               style={{
                 position: 'absolute',
@@ -340,10 +370,10 @@ const Home = () => {
                       {missao.objetivo}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
-                       <Star size={10} color="#fca311" fill="#fca311" />
-                       <span style={{ fontSize: '0.7rem', color: '#fca311', fontWeight: 'bold' }}>
-                         +{missao.recompensa} pts
-                       </span>
+                        <Star size={10} color="#fca311" fill="#fca311" />
+                        <span style={{ fontSize: '0.7rem', color: '#fca311', fontWeight: 'bold' }}>
+                          +{missao.recompensa} pts
+                        </span>
                     </div>
                   </div>
                 ))
@@ -413,7 +443,6 @@ const Home = () => {
             </div>
           </div>
 
-          {/* BUSCA E SORTEIO */}
           <div
             style={{
               marginTop: '30px',
@@ -462,7 +491,6 @@ const Home = () => {
             </button>
           </div>
 
-          {/* CATEGORIAS */}
           <div
             style={{
               display: 'flex',
@@ -491,7 +519,6 @@ const Home = () => {
           </div>
         </header>
 
-        {/* GRID DE JOGOS */}
         <div
           style={{
             display: 'grid',

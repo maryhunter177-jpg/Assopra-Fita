@@ -5,13 +5,15 @@ import GameRoom from './pages/GameRoom';
 import Login from './pages/Login';
 import Perfil from './pages/Perfil';
 import Ranking from './pages/Ranking';
+import Loja from './pages/Loja'; // <-- IMPORTAÇÃO DA LOJA (PÚBLICA)
 
 // Importações da Área Administrativa (GM)
-import AdminDashboard from './pages/AdminDashboard'; // O portal central
+import AdminDashboard from './pages/AdminDashboard';
 import AdminMissoes from './pages/AdminMissoes';
 import AdminJogos from './pages/AdminJogos';
 import AdminUsuarios from './pages/AdminUsuarios';
-import AdminDesafios from './pages/AdminDesafios'; // <-- IMPORTADO PARA FUNCIONAR O CLIQUE
+import AdminDesafios from './pages/AdminDesafios';
+import AdminLoja from './pages/AdminLoja'; // <-- IMPORTAÇÃO DA ADM DA LOJA
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/ranking" element={<Ranking />} />
+        <Route path="/loja" element={<Loja />} /> {/* <-- ROTA DA LOJA ADICIONADA */}
 
         {/* ==============================
             ROTAS EXCLUSIVAS DO ADMIN (GM)
@@ -45,6 +48,9 @@ function App() {
 
         {/* Controle de Usuários */}
         <Route path="/admin-usuarios" element={<AdminUsuarios />} />
+
+        {/* Gerenciar Itens da Loja */}
+        <Route path="/admin-loja" element={<AdminLoja />} />
       </Routes>
     </Router>
   );
