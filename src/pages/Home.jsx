@@ -14,6 +14,7 @@ import {
   Crown,
   Medal,
 } from 'lucide-react';
+import { games } from '../constants/games';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const Home = () => {
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [ranking, setRanking] = useState([]);
   const [loadingRanking, setLoadingRanking] = useState(true);
+  const [loadingGames, setLoadingGames] = useState(true);
+  const [jogos, setJogos] = useState(games);
   const [busca, setBusca] = useState('');
   const [filtroConsole, setFiltroConsole] = useState('Todos');
 
@@ -35,10 +38,29 @@ const Home = () => {
   }, [favoritos]);
 
   useEffect(() => {
+    const fetchJogos = async () => {
+      try {
+        const { data, error } = await supabase.from('jogos').select('*');
+
+        if (error) throw error;
+        if (data.length > 0) {
+          setJogos([...data, ...games]);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar jogos:', error);
+      } finally {
+        setLoadingGames(false);
+      }
+    };
+
+    fetchJogos();
+  }, []);
+
+  useEffect(() => {
     const fetchDados = async (userId) => {
       const { data: perfil } = await supabase
         .from('profiles')
-        .select('pontos, nome')
+        .select('pontos', 'nome')
         .eq('id', userId)
         .single();
       if (perfil) {
@@ -93,345 +115,6 @@ const Home = () => {
     }
   };
 
-  // --- LISTA COMPLETA DE JOGOS ---
-  const jogos = [
-    // MASTER SYSTEM
-    {
-      id: 'sms-sonic',
-      nome: 'Sonic The Hedgehog',
-      console: 'MASTER SYSTEM',
-      core: 'smsplus',
-      gameUrl: '/sonicthehedgehog.sms',
-      capa: 'https://upload.wikimedia.org/wikipedia/en/b/ba/Sonic_the_Hedgehog_1_Genesis_box_art.jpg',
-    },
-    {
-      id: 'sms-alex-kidd',
-      nome: 'Alex Kidd in Miracle World',
-      console: 'MASTER SYSTEM',
-      core: 'smsplus',
-      gameUrl: '/alexkidd.sms',
-      capa: '/alexkidd.jpg',
-    },
-
-    // SNES
-    {
-      id: 'snes-aladdin',
-      nome: "Disney's Aladdin",
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/aladdin.sfc',
-      capa: '/aladdin.jpg',
-    },
-    {
-      id: 'snes-batman-forever',
-      nome: 'Batman Forever',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/batman-forever.sfc',
-      capa: '/batman-forever.jpg',
-    },
-    {
-      id: 'snes-battletoads',
-      nome: 'Battletoads',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/battletoads.sfc',
-      capa: '/battletoads.jpg',
-    },
-    {
-      id: 'snes-battletoads-dd',
-      nome: 'Battletoads & Double Dragon',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/battletoads-double-dragon.sfc',
-      capa: '/battletoads-double-dragon.jpg',
-    },
-    {
-      id: 'snes-chrono-trigger',
-      nome: 'Chrono Trigger',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/chrono-trigger.sfc',
-      capa: '/chrono-trigger.jpg',
-    },
-    {
-      id: 'snes-contra3',
-      nome: 'Contra III',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/contra-3.sfc',
-      capa: '/contra-3.jpg',
-    },
-    {
-      id: 'snes-dkc',
-      nome: 'Donkey Kong Country',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/dkc.sfc',
-      capa: '/dkc.png',
-    },
-    {
-      id: 'snes-earthworm-jim',
-      nome: 'Earthworm Jim',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/earthworm-jim.sfc',
-      capa: '/earthworm-jim.jpg',
-    },
-    {
-      id: 'snes-earthworm-jim2',
-      nome: 'Earthworm Jim 2',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/earthworm-jim-2.sfc',
-      capa: '/earthworm-jim-2.jpg',
-    },
-    {
-      id: 'snes-fatal-fury2',
-      nome: 'Fatal Fury 2',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/fatal-fury-2.sfc',
-      capa: '/fatal-fury-2.jpg',
-    },
-    {
-      id: 'snes-goof-troop',
-      nome: 'Goof Troop',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/goof-troop.sfc',
-      capa: '/goof-troop.jpg',
-    },
-    {
-      id: 'snes-harvest-moon',
-      nome: 'Harvest Moon',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/harvest-moon.sfc',
-      capa: '/harvest-moon.jpg',
-    },
-    {
-      id: 'snes-kirbys-avalanche',
-      nome: "Kirby's Avalanche",
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/kirbys-avalanche.sfc',
-      capa: '/kirbys-avalanche.jpg',
-    },
-    {
-      id: 'snes-kirby-super-star',
-      nome: 'Kirby Super Star',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/kirby-super-star.sfc',
-      capa: '/kirby-super-star.jpg',
-    },
-    {
-      id: 'snes-megaman-x',
-      nome: 'Mega Man X',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/megaman-x.sfc',
-      capa: '/megaman-x.jpg',
-    },
-    {
-      id: 'snes-megaman-x2',
-      nome: 'Mega Man X2',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/megaman-x2.sfc',
-      capa: '/megaman-x2.jpg',
-    },
-    {
-      id: 'snes-megaman-x3',
-      nome: 'Mega Man X3',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/megaman-x3.sfc',
-      capa: '/megaman-x3.jpg',
-    },
-    {
-      id: 'snes-mk2',
-      nome: 'Mortal Kombat 2',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/mortal-kombat-2.sfc',
-      capa: '/mortal-kombat-2.jpg',
-    },
-    {
-      id: 'snes-rrr',
-      nome: "Rock n' Roll Racing",
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/rrr.sfc',
-      capa: '/rrr.jpg',
-    },
-    {
-      id: 'snes-sf2-turbo',
-      nome: 'Street Fighter II Turbo',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/sf2-turbo.sfc',
-      capa: '/sf2-turbo.jpg',
-    },
-    {
-      id: 'snes-supermarioworld',
-      nome: 'Super Mario World',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/supermarioworld.sfc',
-      capa: 'https://upload.wikimedia.org/wikipedia/en/3/32/Super_Mario_World_Coverart.png',
-    },
-    {
-      id: 'snes-topgear',
-      nome: 'Top Gear',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/topgear.smc',
-      capa: '/Capa_de_Top_Gear.jpg',
-    },
-    {
-      id: 'snes-zelda-lttp',
-      nome: 'The Legend of Zelda: A Link to the Past',
-      console: 'SNES',
-      core: 'snes9x',
-      gameUrl: '/zelda-link-to-the-past.sfc',
-      capa: '/zelda-link-to-the-past.jpg',
-    },
-
-    // MEGA DRIVE
-    {
-      id: 'md-goldenaxe',
-      nome: 'Golden Axe',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/goldenaxe.smd',
-      capa: '/goldenaxe.jpg',
-    },
-    {
-      id: 'md-goldenaxe2',
-      nome: 'Golden Axe 2',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/goldenaxe2.smd',
-      capa: '/goldenaxe2.jpg',
-    },
-    {
-      id: 'md-mk3',
-      nome: 'Mortal Kombat 3',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/MortalKombat3.smd',
-      capa: '/ultimate-mortal-kombat-3-capa.webp',
-    },
-    {
-      id: 'md-show-do-milhao',
-      nome: 'Show do Milhão',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/show-do-milhao.smd',
-      capa: '/show-do-milhao.jpg',
-    },
-    {
-      id: 'md-sonic2',
-      nome: 'Sonic The Hedgehog 2',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/sonicthehedgehog2.smd',
-      capa: 'https://upload.wikimedia.org/wikipedia/en/0/0c/Sonic_2_US_Cover.jpg',
-    },
-    {
-      id: 'md-streets-of-rage',
-      nome: 'Streets of Rage',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/Streets_of_Rage.smd',
-      capa: '/Streets_of_Rage.jpg',
-    },
-    {
-      id: 'md-streets-of-rage2',
-      nome: 'Streets of Rage 2',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/streetofrage2.smd',
-      capa: '/streetofrage2.jpg',
-    },
-    {
-      id: 'md-xmen2-clonewars',
-      nome: 'X-Men 2: Clone Wars',
-      console: 'MEGA DRIVE',
-      core: 'genesis_plus_gx',
-      gameUrl: '/xmen2clonewars.smd',
-      capa: '/xmen2clonewars.jpg',
-    },
-
-    // NES
-    {
-      id: 'nes-contra',
-      nome: 'Contra',
-      console: 'NES',
-      core: 'nestopia',
-      gameUrl: '/contra.nes',
-      capa: '/contra.jpg',
-    },
-    {
-      id: 'nes-duck-hunt',
-      nome: 'Duck Hunt',
-      console: 'NES',
-      core: 'nestopia',
-      gameUrl: '/duck-hunt.nes',
-      capa: '/duck-hunt.jpg',
-    },
-
-    // GBA
-    {
-      id: 'gba-zelda-minish-cap',
-      nome: 'The Legend of Zelda: The Minish Cap',
-      console: 'GBA',
-      core: 'mgba',
-      gameUrl: '/LegendOfZeldaTheMinishCap.gba',
-      capa: '/zelda.jpg',
-    },
-    {
-      id: 'gba-pokemon-fire-red',
-      nome: 'Pokémon Fire Red',
-      console: 'GBA',
-      core: 'mgba',
-      gameUrl: '/pokemon-fire-red.gba',
-      capa: '/pokemon-fire-red.jpg',
-    },
-
-    // GAME BOY
-    {
-      id: 'gb-pokemon-silver',
-      nome: 'Pokémon Silver',
-      console: 'GAME BOY',
-      core: 'gambatte',
-      gameUrl: '/PokémonSilver.gbc',
-      capa: '/pokemon-silver.jpg',
-    },
-
-    // N64
-    {
-      id: 'n64-super-mario-64',
-      nome: 'Super Mario 64',
-      console: 'NINTENDO 64',
-      core: 'mupen64plus_next',
-      gameUrl: '/Super_Mario_64.z64',
-      capa: '/Super_Mario_64.jpg',
-    },
-
-    // ATARI
-    {
-      id: 'atari-asteroids',
-      nome: 'Asteroids',
-      console: 'ATARI',
-      core: 'stella',
-      gameUrl: '/asteroids.a26',
-      capa: '/asteroids.jpg',
-    },
-  ];
-
   const jogarAleatorio = () => {
     if (jogos.length === 0) return;
     const indiceAleatorio = Math.floor(Math.random() * jogos.length);
@@ -453,7 +136,7 @@ const Home = () => {
   ];
 
   const jogosFiltrados = jogos.filter((jogo) => {
-    const bateBusca = jogo.nome.toLowerCase().includes(busca.toLowerCase());
+    const bateBusca = jogo.nome?.toLowerCase().includes(busca.toLowerCase());
     let bateCategoria = true;
     if (filtroConsole === '❤️ Favoritos') {
       bateCategoria = favoritos.includes(jogo.id);
@@ -747,92 +430,100 @@ const Home = () => {
             gap: '20px',
           }}
         >
-          {jogosFiltrados.map((jogo) => (
-            <div
-              key={jogo.id}
-              style={{
-                background: '#242038',
-                borderRadius: '12px',
-                padding: '12px',
-                textAlign: 'center',
-                border: '1px solid #333',
-                position: 'relative',
-              }}
-            >
-              <button
-                onClick={() => toggleFavorito(jogo.id)}
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  background: 'rgba(0,0,0,0.6)',
-                  border: 'none',
-                  borderRadius: '50%',
-                  cursor: 'pointer',
-                  zIndex: 10,
-                  padding: '5px',
-                }}
-              >
-                <Heart
-                  size={18}
-                  color={favoritos.includes(jogo.id) ? '#ff4d4d' : 'white'}
-                  fill={favoritos.includes(jogo.id) ? '#ff4d4d' : 'none'}
-                />
-              </button>
+          {loadingGames ? (
+            <span style={{ color: '#666' }}>Carregando...</span>
+          ) : (
+            jogosFiltrados.map((jogo) => (
               <div
+                key={jogo.id}
                 style={{
-                  height: '160px',
-                  marginBottom: '10px',
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  background: '#000',
+                  background: '#242038',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  textAlign: 'center',
+                  border: '1px solid #333',
+                  position: 'relative',
                 }}
               >
-                <img
-                  src={jogo.capa}
-                  alt={jogo.nome}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-              <h3
-                style={{
-                  fontSize: '0.85rem',
-                  color: '#fff',
-                  marginBottom: '5px',
-                  height: '35px',
-                  overflow: 'hidden',
-                }}
-              >
-                {jogo.nome}
-              </h3>
-              <span
-                style={{
-                  fontSize: '0.7rem',
-                  color: '#aaa',
-                  display: 'block',
-                  marginBottom: '10px',
-                }}
-              >
-                {jogo.console}
-              </span>
-              <Link to={`/jogar/${jogo.id}`}>
                 <button
+                  onClick={() => toggleFavorito(jogo.id)}
                   style={{
-                    background: '#fca311',
-                    color: '#1a1a2e',
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    background: 'rgba(0,0,0,0.6)',
                     border: 'none',
-                    padding: '8px 0',
-                    borderRadius: '6px',
+                    borderRadius: '50%',
                     cursor: 'pointer',
-                    width: '100%',
-                    fontWeight: 'bold',
+                    zIndex: 10,
+                    padding: '5px',
                   }}
                 >
-                  JOGAR
+                  <Heart
+                    size={18}
+                    color={favoritos.includes(jogo.id) ? '#ff4d4d' : 'white'}
+                    fill={favoritos.includes(jogo.id) ? '#ff4d4d' : 'none'}
+                  />
                 </button>
-              </Link>
-            </div>
-          ))}
+                <div
+                  style={{
+                    height: '160px',
+                    marginBottom: '10px',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    background: '#000',
+                  }}
+                >
+                  <img
+                    src={jogo.capa_url}
+                    alt={jogo.nome}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </div>
+                <h3
+                  style={{
+                    fontSize: '0.85rem',
+                    color: '#fff',
+                    marginBottom: '5px',
+                    height: '35px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {jogo.nome}
+                </h3>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    color: '#aaa',
+                    display: 'block',
+                    marginBottom: '10px',
+                  }}
+                >
+                  {jogo.console}
+                </span>
+                <Link to={`/jogar/${jogo.id}`}>
+                  <button
+                    style={{
+                      background: '#fca311',
+                      color: '#1a1a2e',
+                      border: 'none',
+                      padding: '8px 0',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      width: '100%',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    JOGAR
+                  </button>
+                </Link>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
