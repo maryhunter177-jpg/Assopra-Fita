@@ -1,0 +1,35 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+
+  <!-- Fundo transparente -->
+
+  <!-- Corpo externo -->
+  <rect x="16" y="16" width="224" height="224" fill="#6C7077"/>
+
+  <!-- Borda interna -->
+  <rect x="24" y="24" width="208" height="208" fill="#8B8F97"/>
+
+  <!-- Topo escuro -->
+  <rect x="24" y="24" width="208" height="48" fill="#4B4F55"/>
+
+  <!-- Janela metálica -->
+  <rect x="88" y="32" width="80" height="32" fill="#1E1F22"/>
+  <rect x="96" y="36" width="64" height="24" fill="#3C6EDC"/>
+
+  <!-- Detalhe lateral vermelho -->
+  <rect x="176" y="40" width="8" height="16" fill="#C8453A"/>
+
+  <!-- Etiqueta -->
+  <rect x="56" y="104" width="144" height="96" fill="#E7E7E7"/>
+
+  <!-- Linhas da etiqueta -->
+  <rect x="64" y="112" width="128" height="12" fill="#CFCFCF"/>
+  <rect x="64" y="132" width="96" height="10" fill="#CFCFCF"/>
+  <rect x="64" y="148" width="112" height="10" fill="#CFCFCF"/>
+
+  <!-- Parafusos (pixels) -->
+  <rect x="32" y="32" width="8" height="8" fill="#2B2E33"/>
+  <rect x="216" y="32" width="8" height="8" fill="#2B2E33"/>
+  <rect x="32" y="216" width="8" height="8" fill="#2B2E33"/>
+  <rect x="216" y="216" width="8" height="8" fill="#2B2E33"/>
+
+</svg>
