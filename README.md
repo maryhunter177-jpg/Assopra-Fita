@@ -112,7 +112,3 @@ Ideias boas: adicionar mais consoles, desafios semanais, suporte a save states n
 3. Commit suas mudanças (git commit -m 'feat: adiciona suporte a save states')
 4. Push para a branch (git push origin feature/nova-funcionalidade)
 5. Abra um Pull Request
-
-LINK PARA ACESSAR A PLATAFORMA DO JOGO E JOGAR:
-https://assopra-fita.vercel.app/
-```
